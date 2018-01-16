@@ -15,7 +15,7 @@ RSpec.describe Common do
         { title: 'blog4', date: 'Tue, 18 Oct 2004 12:09:02 -0400' },
         { title: 'blog1', date: 'Tue, 18 Oct 2004 11:09:03 -0400' },
       ]
-      expect(Common.sort_by_date(data)).to eq(expected_data)
+      expect(Common.sort_by_date(data, :date)).to eq(expected_data)
     end
   end
 end

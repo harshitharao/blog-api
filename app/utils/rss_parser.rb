@@ -17,6 +17,6 @@ class RssParser
       rss_results.push(result)
     end
 
-    Common.sort_by_date(rss_results)
+    Common.sort_by_date(rss_results, :published_date)
   end
 end
