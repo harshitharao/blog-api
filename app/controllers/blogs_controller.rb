@@ -1,19 +1,16 @@
 class BlogsController < ApplicationController
   before_action :set_blog, only: [:show, :update, :destroy]
 
-  # GET /blogs
   def index
     @blogs = Blog.all
 
     render json: @blogs
   end
 
-  # GET /blogs/1
   def show
     render json: @blog
   end
 
-  # POST /blogs
   def create
     @blog = Blog.new(blog_params)
 
@@ -22,20 +19,6 @@ class BlogsController < ApplicationController
     else
       render json: @blog.errors, status: :unprocessable_entity
     end
-  end
-
-  # PATCH/PUT /blogs/1
-  def update
-    if @blog.update(blog_params)
-      render json: @blog
-    else
-      render json: @blog.errors, status: :unprocessable_entity
-    end
-  end
-
-  # DELETE /blogs/1
-  def destroy
-    @blog.destroy
   end
 
   private
