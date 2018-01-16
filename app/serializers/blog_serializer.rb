@@ -1,5 +1,5 @@
 class BlogSerializer < ActiveModel::Serializer
-  attributes :title, :link, :description
+  attributes :title, :link, :description, :published_date, :content
 
   INITIAL_DESCRIPTION_SPLIT=30
 

@@ -9,7 +9,7 @@ class RssParser
     rss.each do |result|
       result = {
         title: result.title,
-        date: result.pubDate,
+        published_date: result.pubDate,
         link: result.link,
         description: result.description,
         content: result.content_encoded
