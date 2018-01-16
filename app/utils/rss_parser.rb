@@ -2,9 +2,9 @@ require 'rss'
 require 'open-uri'
 
 class RssParser
-  def self.parse
+  def self.parse(rss_feed)
     rss_results = []
-    rss = RSS::Parser.parse(open('http://omswami.com/feed').read, false).items[0..1]
+    rss = RSS::Parser.parse(open(rss_feed).read, false).items[0..1]
 
     rss.each do |result|
       result = {
@@ -17,6 +17,6 @@ class RssParser
       rss_results.push(result)
     end
 
-    rss_results
+    Common.sort_by_date(rss_results)
   end
 end
