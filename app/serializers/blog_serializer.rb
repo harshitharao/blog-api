@@ -6,6 +6,8 @@ class BlogSerializer < ActiveModel::Serializer
   def description
     description_text = object.description
     initial_n_words = description_text[/(\s*\S+){#{INITIAL_DESCRIPTION_SPLIT}}/]
+    return description_text unless initial_n_words
+
     description_text.slice!(initial_n_words)
     remaining_description = description_text.split('.')[0]
     initial_n_words + remaining_description

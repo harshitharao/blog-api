@@ -64,6 +64,16 @@ RSpec.describe BlogsController, type: :controller do
       response_body = JSON.parse(response.body)
       expect(response_body['description']).to eq('I want to change but my past haunts me, Swami,&#8221; a visitor said to me recently. &#8220;I constantly feel guilty for my sins. How do I get rid of my baggage')
     end
+
+    it "returns blog having description as is if it has less than 30 words" do
+      blog = Blog.create! valid_attributes
+      blog.description = 'small desc'
+      blog.save
+
+      get :show, params: {id: blog.to_param}
+      response_body = JSON.parse(response.body)
+      expect(response_body['description']).to eq('small desc')
+    end
   end
 
   describe "POST #create" do
