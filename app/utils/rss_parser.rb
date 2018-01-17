@@ -4,7 +4,7 @@ require 'open-uri'
 class RssParser
   def self.parse(rss_feed)
     rss_results = []
-    rss = RSS::Parser.parse(open(rss_feed).read, false).items[0..1]
+    rss = RSS::Parser.parse(open(rss_feed).read, false).items
 
     rss.each do |result|
       result = {
