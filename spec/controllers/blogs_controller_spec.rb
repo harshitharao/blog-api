@@ -23,6 +23,32 @@ RSpec.describe BlogsController, type: :controller do
       get :index, params: {}
       expect(response).to be_success
     end
+
+    it "returns latest blogs as new" do
+      old_sample = Blog.create! valid_attributes
+      new_sample = Blog.create! valid_attributes
+      another_new_sample = Blog.create! valid_attributes
+
+      old_sample.created_at = DateTime.now.midnight - 2.day
+      old_sample.title = 'Old sample blog'
+      old_sample.save
+
+      new_sample.created_at = DateTime.now.midnight - 1.day
+      new_sample.save
+
+      another_new_sample.created_at = DateTime.now
+      another_new_sample.title = 'Another new sample blog'
+      another_new_sample.save
+
+      get :index, params: {}
+      response_body = JSON.parse(response.body)
+      expect(response_body[0]['title']).to eq('Old sample blog')
+      expect(response_body[1]['title']).to eq('Sample blog')
+      expect(response_body[2]['title']).to eq('Another new sample blog')
+      expect(response_body[0]['is_new']).to eq(false)
+      expect(response_body[1]['is_new']).to eq(true)
+      expect(response_body[2]['is_new']).to eq(true)
+    end
   end
 
   describe "GET #show" do

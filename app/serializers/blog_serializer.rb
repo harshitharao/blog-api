@@ -1,5 +1,5 @@
 class BlogSerializer < ActiveModel::Serializer
-  attributes :title, :link, :description, :published_date, :content
+  attributes :title, :link, :description, :published_date, :content, :is_new
 
   INITIAL_DESCRIPTION_SPLIT=30
 
@@ -9,5 +9,9 @@ class BlogSerializer < ActiveModel::Serializer
     description_text.slice!(initial_n_words)
     remaining_description = description_text.split('.')[0]
     initial_n_words + remaining_description
+  end
+
+  def is_new
+    object.created_at >= DateTime.now.midnight - 1.day
   end
 end
