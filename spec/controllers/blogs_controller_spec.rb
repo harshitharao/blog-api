@@ -19,6 +19,7 @@ RSpec.describe BlogsController, type: :controller do
   }
 
   let(:user) {User.create!(name: 'Test user', email: 'testuser@gmail.com', password: '123456')}
+  let(:blog) {Blog.create! valid_attributes}
 
   before(:each) do
     @token = AuthenticateUser.call(user.email,user.password).result
@@ -67,7 +68,6 @@ RSpec.describe BlogsController, type: :controller do
     end
 
     it "returns blogs having description as is if it has less than 30 words" do
-      blog = Blog.create! valid_attributes
       blog.description = 'small desc'
       blog.save
 
@@ -79,13 +79,11 @@ RSpec.describe BlogsController, type: :controller do
 
   describe "GET #show" do
     it "returns a success response" do
-      blog = Blog.create! valid_attributes
       get :show, params: {id: blog.to_param}
       expect(response).to be_success
     end
 
     it "returns content but not description" do
-      blog = Blog.create! valid_attributes
       get :show, params: {id: blog.to_param}
       response_body = JSON.parse(response.body)
       expect(response_body['content']).to eq('Full content of blog<br>')
@@ -95,21 +93,29 @@ RSpec.describe BlogsController, type: :controller do
 
   describe "PUT #update" do
     context "with valid params" do
-      # it "renders a JSON response with the blog" do
-      #   blog = Blog.create! valid_attributes
-      #   user = User.create!(name: 'Test user', email: 'testuser@gmail.com', password: '123456')
-      #   put :update, params: {id: blog.to_param, is_favorite: true}
-      #   expect(response).to have_http_status(:ok)
-      #   expect(response.content_type).to eq('application/json')
-      # end
+      it "updates current blog to be favorite on passing is_favorite as true" do
+        put :update, params: {id: blog.to_param, is_favorite: true}
+        expect(response).to have_http_status(:no_content)
+        expect(Favorite.where(user_id: user.id, blog_id: blog.id)[0].present?).to be_truthy
+      end
+
+      it "unmark current blog to not be favorite on passing is_favorite as false" do
+        put :update, params: {id: blog.to_param, is_favorite: true}
+        expect(Favorite.where(user_id: user.id, blog_id: blog.id)[0].present?).to be_truthy
+
+        put :update, params: {id: blog.to_param, is_favorite: false}
+        expect(response).to have_http_status(:no_content)
+        expect(Favorite.where(user_id: user.id, blog_id: blog.id)[0].present?).to be_falsey
+      end
     end
 
-    # context "with invalid params" do
-    #   it "renders a JSON response with errors for the new blog" do
-    #     post :create, params: {blog: invalid_attributes}
-    #     expect(response).to have_http_status(:unprocessable_entity)
-    #     expect(response.content_type).to eq('application/json')
-    #   end
-    # end
+    context "with invalid params" do
+      it "renders a JSON response with errors for the blog update" do
+        put :update, params: {id: blog.id}
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response.content_type).to eq('application/json')
+        expect(Favorite.where(user_id: user.id, blog_id: blog.id)[0].present?).to be_falsey
+      end
+    end
   end
 end

@@ -12,7 +12,8 @@ class BlogsController < ApplicationController
   end
 
   def update
-    Favorite.create_or_delete(blog_params, @current_user) if blog_params[:is_favorite]
+    render json: { message: 'Unable to update blog favorites' }, status: :unprocessable_entity unless blog_params[:is_favorite]
+    Favorite.create_or_delete(blog_params, @current_user)
   end
 
   private
