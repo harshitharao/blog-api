@@ -18,6 +18,14 @@ RSpec.describe BlogsController, type: :controller do
     }
   }
 
+  let(:user) {User.create!(name: 'Test user', email: 'testuser@gmail.com', password: '123456')}
+
+  before(:each) do
+    @token = AuthenticateUser.call(user.email,user.password).result
+    @headers = { HTTP_AUTHORIZATION: @token }
+    request.headers.merge! @headers
+  end
+
   describe "GET #index" do
     it "returns a success response" do
       blog = Blog.create! valid_attributes
@@ -85,28 +93,23 @@ RSpec.describe BlogsController, type: :controller do
     end
   end
 
-  describe "POST #create" do
+  describe "PUT #update" do
     context "with valid params" do
-      it "creates a new Blog" do
-        expect {
-          post :create, params: {blog: valid_attributes}
-        }.to change(Blog, :count).by(1)
-      end
-
-      it "renders a JSON response with the new blog" do
-        post :create, params: {blog: valid_attributes}
-        expect(response).to have_http_status(:created)
-        expect(response.content_type).to eq('application/json')
-        expect(response.location).to eq(blog_url(Blog.last))
-      end
+      # it "renders a JSON response with the blog" do
+      #   blog = Blog.create! valid_attributes
+      #   user = User.create!(name: 'Test user', email: 'testuser@gmail.com', password: '123456')
+      #   put :update, params: {id: blog.to_param, is_favorite: true}
+      #   expect(response).to have_http_status(:ok)
+      #   expect(response.content_type).to eq('application/json')
+      # end
     end
 
-    context "with invalid params" do
-      it "renders a JSON response with errors for the new blog" do
-        post :create, params: {blog: invalid_attributes}
-        expect(response).to have_http_status(:unprocessable_entity)
-        expect(response.content_type).to eq('application/json')
-      end
-    end
+    # context "with invalid params" do
+    #   it "renders a JSON response with errors for the new blog" do
+    #     post :create, params: {blog: invalid_attributes}
+    #     expect(response).to have_http_status(:unprocessable_entity)
+    #     expect(response.content_type).to eq('application/json')
+    #   end
+    # end
   end
 end
