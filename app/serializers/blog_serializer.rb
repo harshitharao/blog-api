@@ -1,5 +1,5 @@
 class BlogSerializer < ActiveModel::Serializer
-  attributes :title, :link, :description, :published_date, :is_new
+  attributes :id, :title, :link, :description, :published_date, :is_new, :is_favorite
 
   INITIAL_DESCRIPTION_SPLIT=30
 
@@ -15,5 +15,9 @@ class BlogSerializer < ActiveModel::Serializer
 
   def is_new
     object.created_at >= DateTime.now.midnight - 1.day
+  end
+
+  def is_favorite
+    Favorite.is_favorite_blog(object.id, @instance_options[:user].id)
   end
 end
