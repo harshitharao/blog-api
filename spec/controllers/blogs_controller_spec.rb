@@ -6,7 +6,8 @@ RSpec.describe BlogsController, type: :controller do
     {
       title: 'Sample blog',
       link: 'https://sample-blog.html',
-      description: 'I want to change but my past haunts me, Swami,&#8221; a visitor said to me recently. &#8220;I constantly feel guilty for my sins. How do I get rid of my baggage.Two things will follow you to your grave. I replied. &#8220;Wanna guess?&#8221; And creditors,&#8221; I joked. He laughed a nervous laugh.That is not to say that there&#8217;s no way of shedding our past. '
+      description: 'I want to change but my past haunts me, Swami,&#8221; a visitor said to me recently. &#8220;I constantly feel guilty for my sins. How do I get rid of my baggage.Two things will follow you to your grave. I replied. &#8220;Wanna guess?&#8221; And creditors,&#8221; I joked. He laughed a nervous laugh.That is not to say that there&#8217;s no way of shedding our past. ',
+      content: 'Full content of blog<br>'
     }
   }
 
@@ -49,6 +50,23 @@ RSpec.describe BlogsController, type: :controller do
       expect(response_body[1]['is_new']).to eq(true)
       expect(response_body[2]['is_new']).to eq(true)
     end
+
+    it "returns blogs having description around 30 words" do
+      blog = Blog.create! valid_attributes
+      get :index
+      response_body = JSON.parse(response.body)
+      expect(response_body[0]['description']).to eq('I want to change but my past haunts me, Swami,&#8221; a visitor said to me recently. &#8220;I constantly feel guilty for my sins. How do I get rid of my baggage')
+    end
+
+    it "returns blogs having description as is if it has less than 30 words" do
+      blog = Blog.create! valid_attributes
+      blog.description = 'small desc'
+      blog.save
+
+      get :index
+      response_body = JSON.parse(response.body)
+      expect(response_body[0]['description']).to eq('small desc')
+    end
   end
 
   describe "GET #show" do
@@ -58,21 +76,12 @@ RSpec.describe BlogsController, type: :controller do
       expect(response).to be_success
     end
 
-    it "returns blog having description around 30 words" do
+    it "returns content but not description" do
       blog = Blog.create! valid_attributes
       get :show, params: {id: blog.to_param}
       response_body = JSON.parse(response.body)
-      expect(response_body['description']).to eq('I want to change but my past haunts me, Swami,&#8221; a visitor said to me recently. &#8220;I constantly feel guilty for my sins. How do I get rid of my baggage')
-    end
-
-    it "returns blog having description as is if it has less than 30 words" do
-      blog = Blog.create! valid_attributes
-      blog.description = 'small desc'
-      blog.save
-
-      get :show, params: {id: blog.to_param}
-      response_body = JSON.parse(response.body)
-      expect(response_body['description']).to eq('small desc')
+      expect(response_body['content']).to eq('Full content of blog<br>')
+      expect(response_body['description']).to eq(nil)
     end
   end
 

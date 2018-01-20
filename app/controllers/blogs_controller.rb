@@ -8,7 +8,7 @@ class BlogsController < ApplicationController
   end
 
   def show
-    render json: @blog
+    render json: @blog, serializer: BlogDetailsSerializer
   end
 
   def create
