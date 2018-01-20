@@ -95,7 +95,7 @@ RSpec.describe BlogsController, type: :controller do
     context "with valid params" do
       it "updates current blog to be favorite on passing is_favorite as true" do
         put :update, params: {id: blog.to_param, is_favorite: true}
-        expect(response).to have_http_status(:no_content)
+        expect(response).to have_http_status(:ok)
         expect(Favorite.where(user_id: user.id, blog_id: blog.id)[0].present?).to be_truthy
       end
 
@@ -104,7 +104,7 @@ RSpec.describe BlogsController, type: :controller do
         expect(Favorite.where(user_id: user.id, blog_id: blog.id)[0].present?).to be_truthy
 
         put :update, params: {id: blog.to_param, is_favorite: false}
-        expect(response).to have_http_status(:no_content)
+        expect(response).to have_http_status(:ok)
         expect(Favorite.where(user_id: user.id, blog_id: blog.id)[0].present?).to be_falsey
       end
     end
