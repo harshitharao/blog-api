@@ -1,13 +1,16 @@
 class BlogsController < ApplicationController
+  skip_before_action :authenticate_request, only: [:show, :index]
   before_action :find_blog, only: [:show, :update]
 
   def index
+    authenticate_request if request.headers['Authorization'].present?
     @blogs = Common.sort_by_date(Blog.all, :published_date)
 
     render json: @blogs, user: @current_user, show_details: false
   end
 
   def show
+    authenticate_request if request.headers['Authorization'].present?
     render json: @blog, user: @current_user, show_details: true
   end
 

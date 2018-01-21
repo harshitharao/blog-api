@@ -1,13 +1,13 @@
 class BlogSerializer < ActiveModel::Serializer
-  attributes :id, :title, :link, :published_date, :is_new, :is_favorite, :cover_image
+  attributes :id, :title, :link, :published_date, :is_new, :cover_image
 
   INITIAL_DESCRIPTION_SPLIT=30
 
   def attributes(user, details)
     if @instance_options[:show_details]
-      super.merge(content: object.content)
+      @instance_options[:user] ? super.merge(content: object.content, is_favorite: is_favorite) : super.merge(content: object.content)
     else
-      super.merge(description: description)
+      @instance_options[:user] ? super.merge(description: description, is_favorite: is_favorite) : super.merge(description: description)
     end
   end
 

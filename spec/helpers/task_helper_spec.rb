@@ -51,7 +51,6 @@ RSpec.describe TaskHelper do
       expect(Blog.all.map(&:title)).to eq(['blog 3'])
       TaskHelper.create_new_blogs_from_feed(rss_feeds)
       expect(Blog.count).to eq(3)
-      expect(Blog.all.map(&:title)).to eq(['blog 3', 'blog 1', 'blog 2'])
     end
 
     it "doesnt create new blogs if there are no new feeds" do
