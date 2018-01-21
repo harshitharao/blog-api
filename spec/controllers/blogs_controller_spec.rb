@@ -29,59 +29,80 @@ RSpec.describe BlogsController, type: :controller do
   end
 
   describe "GET #index" do
-    it "returns a success response" do
+    it "returns a success response with blog attributes except content" do
       blog = Blog.create! valid_attributes
       get :index, params: {}
+      response_body = JSON.parse(response.body)
       expect(response).to be_success
+      first_response = response_body[0]
+      expect(first_response['title']).to eq('Sample blog')
+      expect(first_response['link']).to eq('https://sample-blog.html')
+      expect(first_response['description']).to eq('I want to change but my past haunts me, Swami,&#8221; a visitor said to me recently. &#8220;I constantly feel guilty for my sins. How do I get rid of my baggage')
+      expect(first_response['published_date']).to eq('2018-01-20T00:00:00+05:30')
+      expect(first_response['is_new']).to eq(true)
+      expect(first_response['is_favorite']).to eq(false)
+      expect(first_response['content']).to eq(nil)
     end
 
-    it "returns latest blogs in order along with new blogs as marked" do
-      old_sample = Blog.create! valid_attributes
-      new_sample = Blog.create! valid_attributes
-      another_new_sample = Blog.create! valid_attributes
+    context 'is_new with latest blogs sorted' do
+      it "returns latest blogs in order along with new blogs as marked" do
+        old_sample = Blog.create! valid_attributes
+        new_sample = Blog.create! valid_attributes
+        another_new_sample = Blog.create! valid_attributes
 
-      old_sample.created_at = DateTime.now.midnight - 2.day
-      old_sample.title = 'Old sample blog'
-      old_sample.save
+        old_sample.created_at = DateTime.now.midnight - 2.day
+        old_sample.title = 'Old sample blog'
+        old_sample.save
 
-      new_sample.created_at = DateTime.now.midnight - 1.day
-      new_sample.save
+        new_sample.created_at = DateTime.now.midnight - 1.day
+        new_sample.save
 
-      another_new_sample.created_at = DateTime.now
-      another_new_sample.title = 'Another new sample blog'
-      another_new_sample.save
+        another_new_sample.created_at = DateTime.now
+        another_new_sample.title = 'Another new sample blog'
+        another_new_sample.save
 
-      get :index, params: {}
-      response_body = JSON.parse(response.body)
-      expect(response_body[0]['title']).to eq('Another new sample blog')
-      expect(response_body[1]['title']).to eq('Sample blog')
-      expect(response_body[2]['title']).to eq('Old sample blog')
-      expect(response_body[0]['is_new']).to eq(true)
-      expect(response_body[1]['is_new']).to eq(true)
-      expect(response_body[2]['is_new']).to eq(false)
+        get :index, params: {}
+        response_body = JSON.parse(response.body)
+        expect(response_body[0]['title']).to eq('Another new sample blog')
+        expect(response_body[1]['title']).to eq('Sample blog')
+        expect(response_body[2]['title']).to eq('Old sample blog')
+        expect(response_body[0]['is_new']).to eq(true)
+        expect(response_body[1]['is_new']).to eq(true)
+        expect(response_body[2]['is_new']).to eq(false)
+      end
     end
 
-    it "returns blogs having description around 30 words" do
-      blog = Blog.create! valid_attributes
-      get :index
-      response_body = JSON.parse(response.body)
-      expect(response_body[0]['description']).to eq('I want to change but my past haunts me, Swami,&#8221; a visitor said to me recently. &#8220;I constantly feel guilty for my sins. How do I get rid of my baggage')
-    end
+    context 'description' do
+      it "returns blogs having description around 30 words" do
+        blog = Blog.create! valid_attributes
+        get :index
+        response_body = JSON.parse(response.body)
+        expect(response_body[0]['description']).to eq('I want to change but my past haunts me, Swami,&#8221; a visitor said to me recently. &#8220;I constantly feel guilty for my sins. How do I get rid of my baggage')
+      end
 
-    it "returns blogs having description as is if it has less than 30 words" do
-      blog.description = 'small desc'
-      blog.save
+      it "returns blogs having description as is if it has less than 30 words" do
+        blog.description = 'small desc'
+        blog.save
 
-      get :index
-      response_body = JSON.parse(response.body)
-      expect(response_body[0]['description']).to eq('small desc')
+        get :index
+        response_body = JSON.parse(response.body)
+        expect(response_body[0]['description']).to eq('small desc')
+      end
     end
   end
 
   describe "GET #show" do
-    it "returns a success response" do
+    it "returns a success response with blog attributes except description" do
       get :show, params: {id: blog.to_param}
+      response_body = JSON.parse(response.body)
       expect(response).to be_success
+      expect(response_body['title']).to eq('Sample blog')
+      expect(response_body['link']).to eq('https://sample-blog.html')
+      expect(response_body['content']).to eq('Full content of blog<br>')
+      expect(response_body['published_date']).to eq('2018-01-20T00:00:00+05:30')
+      expect(response_body['is_new']).to eq(true)
+      expect(response_body['is_favorite']).to eq(false)
+      expect(response_body['description']).to eq(nil)
     end
 
     it "returns content but not description" do
