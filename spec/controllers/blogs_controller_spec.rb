@@ -7,7 +7,8 @@ RSpec.describe BlogsController, type: :controller do
       title: 'Sample blog',
       link: 'https://sample-blog.html',
       description: 'I want to change but my past haunts me, Swami,&#8221; a visitor said to me recently. &#8220;I constantly feel guilty for my sins. How do I get rid of my baggage.Two things will follow you to your grave. I replied. &#8220;Wanna guess?&#8221; And creditors,&#8221; I joked. He laughed a nervous laugh.That is not to say that there&#8217;s no way of shedding our past. ',
-      content: 'Full content of blog<br>'
+      content: 'Full content of blog<br>',
+      published_date: DateTime.now.midnight - 1.day
     }
   }
 
@@ -34,7 +35,7 @@ RSpec.describe BlogsController, type: :controller do
       expect(response).to be_success
     end
 
-    it "returns latest blogs as new" do
+    it "returns latest blogs in order along with new blogs as marked" do
       old_sample = Blog.create! valid_attributes
       new_sample = Blog.create! valid_attributes
       another_new_sample = Blog.create! valid_attributes
@@ -52,12 +53,12 @@ RSpec.describe BlogsController, type: :controller do
 
       get :index, params: {}
       response_body = JSON.parse(response.body)
-      expect(response_body[0]['title']).to eq('Old sample blog')
+      expect(response_body[0]['title']).to eq('Another new sample blog')
       expect(response_body[1]['title']).to eq('Sample blog')
-      expect(response_body[2]['title']).to eq('Another new sample blog')
-      expect(response_body[0]['is_new']).to eq(false)
+      expect(response_body[2]['title']).to eq('Old sample blog')
+      expect(response_body[0]['is_new']).to eq(true)
       expect(response_body[1]['is_new']).to eq(true)
-      expect(response_body[2]['is_new']).to eq(true)
+      expect(response_body[2]['is_new']).to eq(false)
     end
 
     it "returns blogs having description around 30 words" do

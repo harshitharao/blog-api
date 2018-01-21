@@ -2,7 +2,7 @@ class BlogsController < ApplicationController
   before_action :find_blog, only: [:show, :update]
 
   def index
-    @blogs = Blog.all
+    @blogs = Common.sort_by_date(Blog.all, :published_date)
 
     render json: @blogs, user: @current_user, show_details: false
   end
