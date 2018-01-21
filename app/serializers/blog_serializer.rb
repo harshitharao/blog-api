@@ -22,7 +22,8 @@ class BlogSerializer < ActiveModel::Serializer
   end
 
   def is_new
-    object.created_at >= DateTime.now.midnight - 1.day
+    previous_midnight = DateTime.now.midnight - 1.day
+    object.created_at >= previous_midnight
   end
 
   def is_favorite
