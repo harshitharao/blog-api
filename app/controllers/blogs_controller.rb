@@ -4,11 +4,11 @@ class BlogsController < ApplicationController
   def index
     @blogs = Blog.all
 
-    render json: @blogs, user: @current_user
+    render json: @blogs, user: @current_user, show_details: false
   end
 
   def show
-    render json: @blog, serializer: BlogDetailsSerializer, user: @current_user
+    render json: @blog, user: @current_user, show_details: true
   end
 
   def update
