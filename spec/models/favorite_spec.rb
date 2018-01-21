@@ -6,7 +6,8 @@ RSpec.describe Favorite, type: :model do
       title: 'Sample blog',
       link: 'https://sample-blog.html',
       description: 'I want to change but my past haunts me, Swami,&#8221; a visitor said to me recently. &#8220;I constantly feel guilty for my sins. How do I get rid of my baggage.Two things will follow you to your grave. I replied. &#8220;Wanna guess?&#8221; And creditors,&#8221; I joked. He laughed a nervous laugh.That is not to say that there&#8217;s no way of shedding our past. ',
-      content: 'Full content of blog<br>'
+      content: 'Full content of blog<br>',
+      published_date: DateTime.now.midnight - 1.day
     }
   }
   let(:user) {User.create!(name: 'Test user', email: 'testuser@gmail.com', password: '123456')}

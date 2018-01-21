@@ -7,15 +7,17 @@ RSpec.describe TaskHelper do
         {
           title: 'blog 1',
           link: 'http://blog1.html',
+          description: 'Few content about the blog',
           published_date: '2004-10-19 11:09:03 -0400'
         },
         {
           title: 'blog 2',
           link: 'http://blog2.html',
+          description: 'Few content about the blog',
           published_date: '2004-10-18 11:09:03 -0400'
         }
       ]
-      blog = Blog.create!(title: 'blog 2', link: 'http://blog2.html', published_date: 'Tue, 18 Oct 2004 11:09:03 -0400')
+      blog = Blog.create!(title: 'blog 2', link: 'http://blog2.html', description: 'Few content about the blog', published_date: 'Tue, 18 Oct 2004 11:09:03 -0400')
       expect(Blog.count).to eq(1)
       expect(Blog.all.map(&:title)).to eq(['blog 2'])
       TaskHelper.create_new_blogs_from_feed(rss_feed)
@@ -28,20 +30,23 @@ RSpec.describe TaskHelper do
         {
           title: 'blog 1',
           link: 'http://blog1.html',
+          description: 'Few content about the blog',
           published_date: '2004-10-19 11:09:03 -0400'
         },
         {
           title: 'blog 2',
           link: 'http://blog2.html',
+          description: 'Few content about the blog',
           published_date: '2004-10-18 11:09:03 -0400'
         },
         {
           title: 'blog 3',
           link: 'http://blog3.html',
+          description: 'Few content about the blog',
           published_date: '2004-10-17 11:09:03 -0400'
         }
       ]
-      blog = Blog.create!(title: 'blog 3', link: 'http://blog3.html', published_date: 'Tue, 17 Oct 2004 11:09:03 -0400')
+      blog = Blog.create!(title: 'blog 3', link: 'http://blog3.html', description: 'Few content about the blog', published_date: 'Tue, 17 Oct 2004 11:09:03 -0400')
       expect(Blog.count).to eq(1)
       expect(Blog.all.map(&:title)).to eq(['blog 3'])
       TaskHelper.create_new_blogs_from_feed(rss_feeds)
@@ -54,10 +59,11 @@ RSpec.describe TaskHelper do
         {
           title: 'blog 3',
           link: 'http://blog3.html',
+          description: 'Few content about the blog',
           published_date: '2004-10-17 11:09:03 -0400'
         }
       ]
-      blog = Blog.create!(title: 'blog 3', link: 'http://blog3.html', published_date: 'Tue, 17 Oct 2004 11:09:03 -0400')
+      blog = Blog.create!(title: 'blog 3', link: 'http://blog3.html', description: 'Few content about the blog', published_date: 'Tue, 17 Oct 2004 11:09:03 -0400')
       expect(Blog.count).to eq(1)
       expect(Blog.all.map(&:title)).to eq(['blog 3'])
       TaskHelper.create_new_blogs_from_feed(rss_feeds)
@@ -70,6 +76,7 @@ RSpec.describe TaskHelper do
         {
           title: 'blog 3',
           link: 'http://blog3.html',
+          description: 'Few content about the blog',
           published_date: '2004-10-17 11:09:03 -0400'
         }
       ]
@@ -81,7 +88,7 @@ RSpec.describe TaskHelper do
 
     it "doesnt create any blog if the feed is empty" do
       rss_feeds = []
-      blog = Blog.create!(title: 'blog 3', link: 'http://blog3.html', published_date: 'Tue, 17 Oct 2004 11:09:03 -0400')
+      blog = Blog.create!(title: 'blog 3', link: 'http://blog3.html', description: 'Few content about the blog', published_date: 'Tue, 17 Oct 2004 11:09:03 -0400')
       expect(Blog.count).to eq(1)
       expect(Blog.all.map(&:title)).to eq(['blog 3'])
       TaskHelper.create_new_blogs_from_feed(rss_feeds)
@@ -106,10 +113,11 @@ RSpec.describe TaskHelper do
         {
           title: 'blog 3',
           link: 'http://blog3.html',
+          description: 'Few content about the blog',
           published_date: '2018-01-20 00:30:11 +0000'
         }
       ]
-      blog = Blog.create!(title: 'blog 3', link: 'http://blog3.html', published_date: 'Sat, 20 Jan 2018 00:30:11 +0000')
+      blog = Blog.create!(title: 'blog 3', link: 'http://blog3.html', description: 'Few content about the blog', published_date: 'Sat, 20 Jan 2018 00:30:11 +0000')
       expect(Blog.count).to eq(1)
       expect(Blog.all.map(&:title)).to eq(['blog 3'])
       TaskHelper.create_new_blogs_from_feed(rss_feeds)
@@ -122,26 +130,30 @@ RSpec.describe TaskHelper do
         {
           title: 'blog 1',
           link: 'http://blog1.html',
+          description: 'Few content about the blog',
           published_date: '2004-10-19 11:09:03 -0400'
         },
         {
           title: 'blog 4',
           link: 'http://blog4.html',
+          description: 'Few content about the blog',
           published_date: '2004-10-19 11:09:03 -0400'
         },
         {
           title: 'blog 2',
           link: 'http://blog2.html',
+          description: 'Few content about the blog',
           published_date: '2004-10-18 12:09:03 -0400'
         },
         {
           title: 'blog 3',
           link: 'http://blog3.html',
+          description: 'Few content about the blog',
           published_date: '2004-10-18 11:09:03 -0400'
         }
       ]
-      blog = Blog.create!(title: 'blog 2', link: 'http://blog2.html', published_date: 'Tue, 18 Oct 2004 12:09:03 -0400')
-      blog = Blog.create!(title: 'blog 3', link: 'http://blog3.html', published_date: 'Tue, 18 Oct 2004 11:09:03 -0400')
+      blog = Blog.create!(title: 'blog 2', link: 'http://blog2.html', description: 'Few content about the blog', published_date: 'Tue, 18 Oct 2004 12:09:03 -0400')
+      blog = Blog.create!(title: 'blog 3', link: 'http://blog3.html', description: 'Few content about the blog', published_date: 'Tue, 18 Oct 2004 11:09:03 -0400')
       expect(Blog.count).to eq(2)
       expect(Blog.all.map(&:title)).to eq(['blog 2', 'blog 3'])
       TaskHelper.create_new_blogs_from_feed(rss_feed)
