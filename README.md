@@ -22,6 +22,15 @@ Ex: curl -H "Authorization: <token>" http://localhost:3000/blogs
 - GET http://localhost:3000/blogs/:id #Fetch a specific blog which contains the full content(Ex: http://localhost:3000/blogs/1)
 - PUT http://localhost:3000/blogs/:id?is_favorite=true #Update blog as favorite or not(Ex: http://localhost:3000/blogs/1?is_favorite=true or http://localhost:3000/blogs/1?is_favorite=false)
 
+* Token based Authentication for apis
+- curl -H "Authorization: <token>" http://localhost:3000/blogs #Returns the blogs along with is_favorite attribute
+- http://localhost:3000/blogs #Returns the blogs without is_favorite attribute
+- curl -H "Authorization: <token>" http://localhost:3000/blog/1 #Returns blog 1 along with is_favorite attribute
+- http://localhost:3000/blog/1 #Returns blog 1 along without is_favorite attribute
+- There is no option to mark or unmark the blog as favorite if the user is not logged in or user is not authenticated
+- curl -H "Authorization: <token>" http://localhost:3000/blogs/1?is_favorite=true #Returns successfully updated msg
+- http://localhost:3000/blogs/1?is_favorite=true #Returns unauthorized
+
 * Services
 Cronjob is created to run a rake task every midnight
 - rake development:fetch_blogs_from_rss_feed or RAILS_ENV=development bundle exec rake development:fetch_blogs_from_rss_feed  #To run the rake task manually
