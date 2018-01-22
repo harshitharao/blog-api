@@ -70,13 +70,16 @@ RSpec.describe BlogsController, type: :controller do
         another_new_sample = Blog.create! valid_attributes
 
         old_sample.created_at = DateTime.now.midnight - 2.day
+        old_sample.published_date = DateTime.now.midnight - 3.day
         old_sample.title = 'Old sample blog'
         old_sample.save
 
         new_sample.created_at = DateTime.now.midnight - 1.day
+        new_sample.published_date = DateTime.now.midnight - 2.day
         new_sample.save
 
         another_new_sample.created_at = DateTime.now
+        another_new_sample.published_date = DateTime.now - 1.day
         another_new_sample.title = 'Another new sample blog'
         another_new_sample.save
 
