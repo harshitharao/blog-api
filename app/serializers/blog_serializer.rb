@@ -1,5 +1,5 @@
 class BlogSerializer < ActiveModel::Serializer
-  attributes :id, :title, :link, :published_date, :is_new, :cover_image
+  attributes :id, :title, :link, :published_date, :is_new, :cover_image_url
 
   INITIAL_DESCRIPTION_SPLIT=30
 
@@ -30,7 +30,7 @@ class BlogSerializer < ActiveModel::Serializer
     Favorite.is_favorite_blog(object.id, @instance_options[:user].id)
   end
 
-  def cover_image
-    object.cover_image || ActionController::Base.helpers.asset_path("default.jpg")
+  def cover_image_url
+    object.cover_image_url || ActionController::Base.helpers.asset_path("default.jpg")
   end
 end

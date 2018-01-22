@@ -17,13 +17,13 @@ ActiveRecord::Schema.define(version: 20180121095953) do
 
   create_table "blogs", force: :cascade do |t|
     t.string "title"
-    t.string "published_date"
+    t.datetime "published_date"
     t.string "description"
     t.string "content"
     t.string "link"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "cover_image"
+    t.string "cover_image_url"
   end
 
   create_table "favorites", force: :cascade do |t|
